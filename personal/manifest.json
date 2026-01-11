@@ -1,0 +1,9 @@
+{
+  "schema_version": "1.0",
+  "distribution": "EmComm-Tools Debian Edition",
+  "version": "1.0.0",
+  "channel": "personal",
+  "release_date": "2026-01-10",
+  "base_url": "https://raw.githubusercontent.com/emcomm-tools/updates/main/personal/files",
+  "files": []
+}
