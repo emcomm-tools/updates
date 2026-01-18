@@ -1,9 +1,130 @@
 {
   "schema_version": "1.0",
   "distribution": "EmComm-Tools Debian Edition",
-  "version": "1.0.0",
+  "version": "1.4.3",
   "channel": "personal",
-  "release_date": "2026-01-10",
+  "release_date": "2026-01-18",
   "base_url": "https://raw.githubusercontent.com/emcomm-tools/updates/main/personal/files",
-  "files": []
+  "files": [
+    {
+      "path": "bin/et-flask-apps/et-firstboot/et-firstboot.py",
+      "version": "1.0.56",
+      "sha256": "ef2ef8cd09260f6f7b11c52e3dd582908ce914c34cefa07ca85fefed8b73c96a",
+      "size": 113602,
+      "permissions": "755",
+      "description": "EmComm-Tools First Boot Wizard"
+    },
+    {
+      "path": "bin/et-flask-apps/et-radio/et-radio.py",
+      "version": "2026.01.18",
+      "sha256": "7005a3d69fdb5c9d7fe099766b814d227d8e30317602cd9d56a703ec03c2aa38",
+      "size": 12794,
+      "permissions": "755",
+      "description": "et-radio - Radio Selection and Configuration"
+    },
+    {
+      "path": "bin/et-flask-apps/et-radio/static/css/radio.css",
+      "version": "2026.01.18",
+      "sha256": "49ede113a03ec4cc0212adeeb2136d519ef79c9e1d0347cadd83d3bb743c1097",
+      "size": 5372,
+      "permissions": "644",
+      "description": ""
+    },
+    {
+      "path": "bin/et-flask-apps/et-radio/static/css/style.css",
+      "version": "2026.01.14",
+      "sha256": "1264e762b7c11c7dec32034e164cb6194aa8cfa1e1c857184f41ddd6186f789f",
+      "size": 8756,
+      "permissions": "644",
+      "description": ""
+    },
+    {
+      "path": "bin/et-flask-apps/et-radio/static/js/app.js",
+      "version": "2026.01.14",
+      "sha256": "dff7cb5d9da6c24b903c6958da0002feecfccc2583d3ece05c905a6d0ab5b6d5",
+      "size": 2486,
+      "permissions": "644",
+      "description": ""
+    },
+    {
+      "path": "bin/et-flask-apps/et-radio/templates/base.html",
+      "version": "2026.01.14",
+      "sha256": "41d875a797c52766167165f3892119b73d435f8e07f633e3c371ae90681d29ed",
+      "size": 669,
+      "permissions": "644",
+      "description": ""
+    },
+    {
+      "path": "bin/et-flask-apps/et-radio/templates/config.html",
+      "version": "2026.01.14",
+      "sha256": "7bd3c6f5b8f478208687352f474b0e0b0e006c9e5468d8ef524cc64f576f16b0",
+      "size": 1566,
+      "permissions": "644",
+      "description": ""
+    },
+    {
+      "path": "bin/et-flask-apps/et-radio/templates/done.html",
+      "version": "2026.01.14",
+      "sha256": "bca4e251682717778d93dd520e2877d3be4885a1de48e445babeeecba56b4fe6",
+      "size": 1541,
+      "permissions": "644",
+      "description": ""
+    },
+    {
+      "path": "bin/et-flask-apps/et-radio/templates/index.html",
+      "version": "2026.01.14",
+      "sha256": "8e321ace1c750d56375bc5e96a5f0bf7e26fea002e7cae9c61c7aadcf38240ef",
+      "size": 1965,
+      "permissions": "644",
+      "description": ""
+    },
+    {
+      "path": "bin/et-flask-apps/et-user/et-user.py",
+      "version": "2026.01.18",
+      "sha256": "d51c1f0a4e953c8762cafe35e187efdd6c2ed1fae41d5a22bceb3f3e16292a56",
+      "size": 11653,
+      "permissions": "755",
+      "description": "et-user - EmComm-Tools User Configuration"
+    },
+    {
+      "path": "bin/et-flask-apps/et-user/static/css/style.css",
+      "version": "2026.01.14",
+      "sha256": "1264e762b7c11c7dec32034e164cb6194aa8cfa1e1c857184f41ddd6186f789f",
+      "size": 8756,
+      "permissions": "644",
+      "description": ""
+    },
+    {
+      "path": "bin/et-flask-apps/et-user/static/css/user.css",
+      "version": "2026.01.14",
+      "sha256": "ff9e1159f0dabb27b842ae1ef68901806aaf6968ec62a912271d9a7dc5ec8c9e",
+      "size": 3891,
+      "permissions": "644",
+      "description": ""
+    },
+    {
+      "path": "bin/et-flask-apps/et-user/static/js/app.js",
+      "version": "2026.01.14",
+      "sha256": "f3ab9dc0c14c33e2087f1e2cf1fa6905caad6cd0961cc9ddedcff1fa9a74fc5d",
+      "size": 187,
+      "permissions": "644",
+      "description": ""
+    },
+    {
+      "path": "bin/et-flask-apps/et-user/templates/base.html",
+      "version": "2026.01.14",
+      "sha256": "1ccd2e15c0056068ba9ea510334b9d2267705098f45e332ff1c2b1199aef098f",
+      "size": 671,
+      "permissions": "644",
+      "description": ""
+    },
+    {
+      "path": "bin/et-flask-apps/et-user/templates/index.html",
+      "version": "2026.01.18",
+      "sha256": "ee9e5ee4aa4525b0fa91f043da2732f3b21a21550b7e8a66a70826af43ddb031",
+      "size": 5638,
+      "permissions": "644",
+      "description": ""
+    }
+  ]
 }

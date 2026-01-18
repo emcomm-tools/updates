@@ -1,11 +1,12 @@
 #!/bin/bash
 # =============================================================================
 # et-manifest-build - Generate manifest.json from overlay files
-# Version: 1.0.0
-# Updated: 2026-01-10
+# Version: 1.1.0
+# Updated: 2026-01-18
 # Author: Sylvain Deguire (VA2OPS)
 #
 # Developer tool to generate manifest for update server
+# Fixed: Handle Python files and various version formats
 # =============================================================================
 
 set -e
@@ -32,28 +33,60 @@ Options:
   -h, --help           Show this help message
 
 Examples:
-  et-manifest-build -s ./overlay/opt/emcomm-tools -o manifest.json -v 1.0.0 -c stable
-  et-manifest-build --source ~/emcomm-tools/overlays/et-r5-personal/overlay/opt/emcomm-tools \\
-                    --output ~/public_html/updates/stable/manifest.json \\
-                    --version 1.0.0 \\
-                    --channel stable \\
-                    --url https://emcomm-tools.ca/updates/stable/files
+  et-manifest-build -s ./personal/files -o ./personal/manifest.json -v 1.0.0 -c personal
+  et-manifest-build -s ./personal/files \\
+                    -o ./personal/manifest.json \\
+                    -v 1.4.3 \\
+                    -c personal \\
+                    -u https://raw.githubusercontent.com/emcomm-tools/updates/main/personal/files
 
 EOF
 }
 
 extract_version_from_file() {
     local file="$1"
+    local version=""
     
-    # Try to extract version from file header
-    local version=$(grep -m1 "^# Version:" "$file" 2>/dev/null | sed 's/# Version: *//' | tr -d '[:space:]')
+    # Try multiple patterns for version extraction
+    # Pattern 1: Bash style "# Version: 1.0.0"
+    version=$(grep -m1 -i "^# Version:" "$file" 2>/dev/null | sed 's/^# Version:[[:space:]]*//' | awk '{print $1}' | tr -d '[:space:]')
     
+    # Pattern 2: Python docstring style "Version: 1.0.56 - ..."
     if [ -z "$version" ]; then
-        # Fallback: use file modification date
+        version=$(grep -m1 -i "^Version:" "$file" 2>/dev/null | sed 's/^Version:[[:space:]]*//' | awk '{print $1}' | tr -d '[:space:]')
+    fi
+    
+    # Pattern 3: VERSION = "1.0.0" or __version__ = "1.0.0"
+    if [ -z "$version" ]; then
+        version=$(grep -m1 -iE "^(VERSION|__version__)[[:space:]]*=" "$file" 2>/dev/null | sed 's/.*=[[:space:]]*["'"'"']//' | sed 's/["'"'"'].*//' | tr -d '[:space:]')
+    fi
+    
+    # Fallback: use file modification date
+    if [ -z "$version" ]; then
         version=$(date -r "$file" '+%Y.%m.%d')
     fi
     
     echo "$version"
+}
+
+extract_description_from_file() {
+    local file="$1"
+    local description=""
+    
+    # Pattern 1: Bash style "# Purpose: ..."
+    description=$(grep -m1 -i "^# Purpose:" "$file" 2>/dev/null | sed 's/^# Purpose:[[:space:]]*//')
+    
+    # Pattern 2: Python docstring - get first line after """
+    if [ -z "$description" ]; then
+        description=$(sed -n '/^"""/,/^"""/p' "$file" 2>/dev/null | sed -n '2p' | sed 's/^[[:space:]]*//')
+    fi
+    
+    # Fallback: empty
+    if [ -z "$description" ]; then
+        description=""
+    fi
+    
+    echo "$description"
 }
 
 get_permissions() {
@@ -84,10 +117,15 @@ generate_manifest() {
         # Skip certain files
         local basename=$(basename "$file")
         case "$basename" in
-            *.pyc|*.pyo|__pycache__|.git*|*.swp|*.bak)
+            *.pyc|*.pyo|__pycache__|.git*|*.swp|*.bak|.DS_Store)
                 continue
                 ;;
         esac
+        
+        # Skip __pycache__ directories
+        if [[ "$file" == *"__pycache__"* ]]; then
+            continue
+        fi
         
         # Get relative path
         local rel_path="${file#$source_dir/}"
@@ -101,16 +139,21 @@ generate_manifest() {
         # Get permissions
         local permissions=$(get_permissions "$file")
         
-        # Get file version
-        local file_version=$(extract_version_from_file "$file")
+        # Get file version (with error handling)
+        local file_version
+        file_version=$(extract_version_from_file "$file") || file_version="$version"
         
-        # Get description from file header
-        local description=$(grep -m1 "^# Purpose:" "$file" 2>/dev/null | sed 's/# Purpose: *//' || echo "")
+        # Get description from file header (with error handling)
+        local description
+        description=$(extract_description_from_file "$file") || description=""
+        
+        # Escape special characters for JSON
+        description=$(echo "$description" | sed 's/\\/\\\\/g' | sed 's/"/\\"/g' | sed 's/\t/ /g' | tr -d '\n\r')
         
         echo -e "  ${BLUE}[SCAN]${NC} $rel_path (v$file_version)"
         
-        # Add to JSON array
-        jq --arg path "$rel_path" \
+        # Add to JSON array using jq with proper error handling
+        if ! jq --arg path "$rel_path" \
            --arg version "$file_version" \
            --arg sha256 "$sha256" \
            --argjson size "$size" \
@@ -123,9 +166,13 @@ generate_manifest() {
                "size": $size,
                "permissions": $permissions,
                "description": $description
-           }]' "$temp_files" > "${temp_files}.tmp" && mv "${temp_files}.tmp" "$temp_files"
+           }]' "$temp_files" > "${temp_files}.tmp" 2>/dev/null; then
+            echo -e "  ${YELLOW}[WARN]${NC} Failed to add $rel_path to manifest, skipping..."
+            continue
+        fi
         
-        ((file_count++))
+        mv "${temp_files}.tmp" "$temp_files"
+        file_count=$((file_count + 1))
         
     done < <(find "$source_dir" -type f -print0 | sort -z)
     
@@ -177,7 +224,7 @@ main() {
     local output_file=""
     local version="1.0.0"
     local channel="stable"
-    local base_url="https://emcomm-tools.ca/updates/stable/files"
+    local base_url="https://raw.githubusercontent.com/emcomm-tools/updates/main/stable/files"
     
     while [[ $# -gt 0 ]]; do
         case $1 in
