@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "distribution": "EmComm-Tools Debian Edition",
-  "version": "1.5.2.1",
+  "version": "1.5.2.2",
   "channel": "stable",
   "release_date": "2026-02-01",
   "base_url": "https://raw.githubusercontent.com/emcomm-tools/updates/main/stable/files",
