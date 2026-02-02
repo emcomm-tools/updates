@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "distribution": "EmComm-Tools Debian Edition",
-  "version": "1.5.2.2",
+  "version": "1.5.2.3",
   "channel": "personal",
   "release_date": "2026-02-01",
   "base_url": "https://raw.githubusercontent.com/emcomm-tools/updates/main",
@@ -11,6 +11,22 @@
       "version": "2026.02.01",
       "sha256": "ea4370c247429cbd95014c1ca5adfc0dcef3aacec9ff954c0a163d21134709f3",
       "size": 24387,
+      "permissions": "775",
+      "description": ""
+    },
+    {
+      "path": "./personal/files/bin/et-persistence/et-save-and-reboot",
+      "version": "2026.02.01",
+      "sha256": "e95e04c8cee564b692d6d32f130c8d80226da14bade2b753505cb2fc3b4fada5",
+      "size": 3032,
+      "permissions": "775",
+      "description": ""
+    },
+    {
+      "path": "./personal/files/bin/et-persistence/et-save-and-shutdown",
+      "version": "2026.02.01",
+      "sha256": "488595247774a989b8c56b5cfe96640d078f5a40cf7810c6a6241fce81a007e1",
+      "size": 3062,
       "permissions": "775",
       "description": ""
     }
